@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PriceRequest;
 use App\Http\Resources\PriceResourceCollection;
 use App\Models\Price;
+use App\Models\Product;
 
 class PriceController extends Controller
 {
@@ -13,8 +14,15 @@ class PriceController extends Controller
         return PriceResourceCollection::make(Price::all());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function updatePrices(string $product_guid, PriceRequest $request): array
     {
+        if (Product::where('guid', $product_guid)->doesntExist()) {
+            throw new \Exception(Product::PRODUCT_NOT_FOUND);
+        }
+
         Price::where('product_guid', $product_guid)->update(['status' => Price::DISABLED]);
 
         return [

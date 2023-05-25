@@ -14,6 +14,8 @@ class Product extends Model
 {
     use HasFactory;
 
+    const PRODUCT_NOT_FOUND = 'Product not found!';
+
     public function prices(): HasMany
     {
         return $this->hasMany(Price::class, 'product_guid', 'guid');
